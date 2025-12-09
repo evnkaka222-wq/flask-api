@@ -25,10 +25,15 @@ def generate_refresh_token(user_id, username):
     token = jwt.encode(payload, JWT_SECRET_KEY, algorithm='HS256')
     return token
 
-def verify_token(token):
+def verify_token(token, token_type='access'):
     """验证JWT token"""
     try:
         payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=['HS256'])
+
+        # ✅ 验证 token 类型
+        if payload.get('type') != token_type:
+            return None
+        
         return payload  # 返回用户信息
     except jwt.ExpiredSignatureError:
         return None  # token过期
