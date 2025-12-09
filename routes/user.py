@@ -17,7 +17,7 @@ db.connect()
 @token_required # 新增：需要token才能访问
 def get_users(current_user): # 新增参数：可以获取当前登录用户信息
     """获取用户列表"""
-    sql = "SELECT id,name FROM work_users_test where status = 1"
+    sql = "SELECT id,name FROM users where status = 1"
     users = db.query(sql)
 
     return success(data=users,message="获取用户列表成功")
@@ -25,7 +25,7 @@ def get_users(current_user): # 新增参数：可以获取当前登录用户信�
 @user_bp.route('/<int:user_id>', methods=['GET'])
 def get_user(user_id):
     """获取单个用户"""
-    sql = "SELECT * FROM work_users_test WHERE id = %s"
+    sql = "SELECT * FROM users WHERE id = %s"
     user = db.query(sql, (user_id,))
     if user:
         return success(data=user[0],message="获取用户成功")
@@ -50,7 +50,7 @@ def add_user():
     placeholders = ', '.join(['%s'] * len(data))
     values = tuple(data.values())
     
-    sql = f"INSERT INTO work_users_test ({fields}) VALUES ({placeholders})"
+    sql = f"INSERT INTO users ({fields}) VALUES ({placeholders})"
     result = db.execute(sql, values)
 
     # 验证是否插入成功
@@ -78,7 +78,7 @@ def update_user(user_id):
         return error(message=err.messages)
     
     # 查询数据是否存在
-    sql = "SELECT * FROM work_users_test WHERE id = %s"
+    sql = "SELECT * FROM users WHERE id = %s"
     user = db.query(sql, (user_id,))
     if not user:
         return error(message="用户不存在")
@@ -93,7 +93,7 @@ def update_user(user_id):
     # 添加user_id到参数列表
     values.append(user_id)
     
-    sql = f"UPDATE work_users_test SET {', '.join(fields)} WHERE id=%s"
+    sql = f"UPDATE users SET {', '.join(fields)} WHERE id=%s"
     result = db.execute(sql, tuple(values))
 
     if result['affected_rows'] > 0:
@@ -105,12 +105,12 @@ def update_user(user_id):
 def delete_user(user_id):
     """删除用户"""
     # 查询数据是否存在
-    sql = "SELECT * FROM work_users_test WHERE id = %s"
+    sql = "SELECT * FROM users WHERE id = %s"
     user = db.query(sql, (user_id,))
     if not user:
         return error(message="用户不存在")
     
-    sql = "UPDATE work_users_test SET status = 7 WHERE id=%s"
+    sql = "UPDATE users SET status = 7 WHERE id=%s"
     result = db.execute(sql, (user_id,))
 
     if result['affected_rows'] > 0:
