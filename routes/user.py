@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request,g
 from utils.database import Database
 from config import DB_CONFIG
 from marshmallow import ValidationError
@@ -14,18 +14,22 @@ db = Database(**DB_CONFIG)
 db.connect()
 
 @user_bp.route('/list', methods=['GET'])
-@token_required # 新增：需要token才能访问
-def get_users(current_user): # 新增参数：可以获取当前登录用户信息
+@token_required # 需要token才能访问
+def get_users():
     """获取用户列表"""
+    current_user = g.current_user  # ✅ 从 g 对象获取
+    
     sql = "SELECT id,name FROM users where status = 1"
     users = db.query(sql)
 
     return success(data=users,message="获取用户列表成功")
 
 @user_bp.route('/<int:user_id>', methods=['GET'])
-@token_required # 新增：需要token才能访问
-def get_user(current_user,user_id):
+@token_required # 需要token才能访问
+def get_user(user_id):
     """获取单个用户"""
+    current_user = g.current_user  # ✅ 从 g 对象获取
+
     sql = "SELECT * FROM users WHERE id = %s"
     user = db.query(sql, (user_id,))
     if user:
@@ -33,9 +37,11 @@ def get_user(current_user,user_id):
     return error(message="用户不存在")
 
 @user_bp.route('/add', methods=['POST'])
-@token_required # 新增：需要token才能访问
-def add_user(current_user):
+@token_required # 需要token才能访问
+def add_user():
     """添加用户"""
+    current_user = g.current_user  # ✅ 从 g 对象获取
+
     data = request.get_json()
     if not data:
         return error(message="没有提供数据")
@@ -66,9 +72,11 @@ def add_user(current_user):
         return error(message="用户添加失败", code=500)
 
 @user_bp.route('/update/<int:user_id>', methods=['PUT'])
-@token_required # 新增：需要token才能访问
-def update_user(current_user,user_id):
+@token_required # 需要token才能访问
+def update_user(user_id):
     """更新用户"""
+    current_user = g.current_user  # ✅ 从 g 对象获取
+
     data = request.get_json()
     if not data:
         return error(message="没有提供数据")
@@ -105,9 +113,11 @@ def update_user(current_user,user_id):
         return error(message="用户更新失败", code=500)
 
 @user_bp.route('/delete/<int:user_id>', methods=['DELETE'])
-@token_required # 新增：需要token才能访问
-def delete_user(current_user,user_id):
+@token_required # 需要token才能访问
+def delete_user(user_id):
     """删除用户"""
+    current_user = g.current_user  # ✅ 从 g 对象获取
+
     # 查询数据是否存在
     sql = "SELECT * FROM users WHERE id = %s"
     user = db.query(sql, (user_id,))

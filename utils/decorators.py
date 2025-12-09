@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import request
+from flask import request,g
 from utils.response import error
 from utils.jwt_utils import verify_token
 
@@ -23,8 +23,8 @@ def token_required(f):
         if not payload:
             return error(message="token无效或已过期，请重新登录", code=401)
         
-        # 将用户信息传递给接口
-        kwargs['current_user'] = payload
+        # 将用户信息存储到 Flask 的 g 对象
+        g.current_user = payload
         
         return f(*args, **kwargs)
     
