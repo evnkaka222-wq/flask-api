@@ -23,7 +23,8 @@ def get_users(current_user): # 新增参数：可以获取当前登录用户信�
     return success(data=users,message="获取用户列表成功")
 
 @user_bp.route('/<int:user_id>', methods=['GET'])
-def get_user(user_id):
+@token_required # 新增：需要token才能访问
+def get_user(current_user,user_id):
     """获取单个用户"""
     sql = "SELECT * FROM users WHERE id = %s"
     user = db.query(sql, (user_id,))
@@ -32,7 +33,8 @@ def get_user(user_id):
     return error(message="用户不存在")
 
 @user_bp.route('/add', methods=['POST'])
-def add_user():
+@token_required # 新增：需要token才能访问
+def add_user(current_user):
     """添加用户"""
     data = request.get_json()
     if not data:
@@ -64,7 +66,8 @@ def add_user():
         return error(message="用户添加失败", code=500)
 
 @user_bp.route('/update/<int:user_id>', methods=['PUT'])
-def update_user(user_id):
+@token_required # 新增：需要token才能访问
+def update_user(current_user,user_id):
     """更新用户"""
     data = request.get_json()
     if not data:
@@ -102,7 +105,8 @@ def update_user(user_id):
         return error(message="用户更新失败", code=500)
 
 @user_bp.route('/delete/<int:user_id>', methods=['DELETE'])
-def delete_user(user_id):
+@token_required # 新增：需要token才能访问
+def delete_user(current_user,user_id):
     """删除用户"""
     # 查询数据是否存在
     sql = "SELECT * FROM users WHERE id = %s"
