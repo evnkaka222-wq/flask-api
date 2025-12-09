@@ -18,7 +18,7 @@ def token_required(f):
             token = token[7:]
         
         # 验证token
-        payload = verify_token(token)
+        payload = verify_token(token,token_type='access')
         
         if not payload:
             return error(message="token无效或已过期，请重新登录", code=401)
@@ -26,6 +26,6 @@ def token_required(f):
         # 将用户信息传递给接口
         kwargs['current_user'] = payload
         
-        return f(*args, **kwargs)
+        return f(payload,*args, **kwargs)
     
     return decorated_function
