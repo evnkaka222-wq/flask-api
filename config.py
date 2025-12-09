@@ -12,5 +12,5 @@ DB_CONFIG = {
 
 # JWT配置
 JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY','dev-secret-key') # JWT密钥
-JWT_EXPIRATION_HOURS = int(os.getenv('JWT_EXPIRATION_HOURS')) # token过期时间
+JWT_EXPIRATION_HOURS = int(os.getenv('JWT_EXPIRATION_HOURS','24')) # token过期时间
 REFRESH_TOKEN_EXPIRATION_DAYS = 7 # refresh_token过期时间

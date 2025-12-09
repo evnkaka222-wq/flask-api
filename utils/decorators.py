@@ -26,6 +26,6 @@ def token_required(f):
         # 将用户信息传递给接口
         kwargs['current_user'] = payload
         
-        return f(payload,*args, **kwargs)
+        return f(*args, **kwargs)
     
     return decorated_function
