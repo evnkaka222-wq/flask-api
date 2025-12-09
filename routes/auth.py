@@ -27,26 +27,19 @@ def login():
     password = validated_data['password']
     
     # 查询用户
-    # sql = "SELECT id, name FROM work_users_test WHERE name = %s"
-    # users = db.query(sql, (username,))
+    sql = "SELECT id, name FROM users WHERE name = %s"
+    users = db.query(sql, (username,))
     
-    # if not users:
-    #    return error(message="用户名或密码错误", code=401)
+    if not users:
+       return error(message="用户名或密码错误", code=401)
     
-    # user = users[0]
+    user = users[0]
     
     # 验证密码（这里简单比对，实际应该用加密）
-    #if user['password'] != password:
-    #    return error(message="用户名或密码错误", code=401)
+    if user['password'] != password:
+       return error(message="用户名或密码错误", code=401)
     
     # 生成token
-    # token = generate_token(user['id'], user['name'])
-
-    if username != 'kaka' or password != 'kaka22_jj':
-        return error(message="用户名或密码错误", code=401)
-    user = {}
-    user['id'] = 266
-    user['name'] = 'kaka'
     token = generate_token(user['id'], user['name'])
     
     return success(
