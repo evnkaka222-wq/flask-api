@@ -1,0 +1,14 @@
+import os
+
+# 数据库配置
+DB_CONFIG = {
+    'host': os.getenv('DB_HOST','localhost'),      # 数据库地址
+    'user': os.getenv('DB_USER','root'),           # 数据库用户名
+    'password': os.getenv('DB_PASSWORD',''),  # 数据库密码
+    'database': os.getenv('DB_DATABASE','mydb'),  # 数据库名
+    'port': int(os.getenv('DB_PORT','3306')),              # 端口号
+}
+
+# JWT配置
+JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY','dev-secret-key') # JWT密钥
+JWT_EXPIRATION_HOURS = os.getenv('JWT_EXPIRATION_HOURS') # token过期时间
