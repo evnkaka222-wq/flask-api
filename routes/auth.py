@@ -27,7 +27,7 @@ def login():
     password = validated_data['password']
     
     # 查询用户
-    sql = "SELECT id, name FROM users WHERE name = %s"
+    sql = "SELECT id, name,password FROM users WHERE name = %s"
     users = db.query(sql, (username,))
     
     if not users:
