@@ -7,6 +7,7 @@ def generate_token(user_id, username):
     payload = {
         'user_id': user_id,
         'username': username,
+        'type': 'access',  # ✅ 确保有这一行
         'exp': datetime.utcnow() + timedelta(hours=JWT_EXPIRATION_HOURS),  # 过期时间
         'iat': datetime.utcnow()  # 签发时间
     }
