@@ -8,6 +8,8 @@ DB_CONFIG = {
     'password': os.getenv('DB_PASSWORD',''),  # 数据库密码
     'database': os.getenv('DB_DATABASE','mydb'),  # 数据库名
     'port': int(os.getenv('DB_PORT','3306')),              # 端口号
+    'max_connections': int(os.getenv('DB_MAX_CONNECTIONS','10')),  # 池最大连接数
+    'min_connections': int(os.getenv('DB_MIN_CONNECTIONS','2'))    # 池最小连接数
 }
 
 # JWT配置
